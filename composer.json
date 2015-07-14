@@ -1,5 +1,6 @@
 {
-    "name": "behat/berail",
+    "vendor": "behat",
+    "name": "berail",
     "description": "Behat Testrail integration",
     "version": "1.0",
     "require": {
