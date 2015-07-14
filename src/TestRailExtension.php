@@ -14,7 +14,7 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 
-class TestRail
+class TestRail implements Extension
 {
 
     /**
@@ -52,6 +52,7 @@ class TestRail
     public function initialize(ExtensionManager $extensionManager)
     {
         // TODO: Implement initialize() method.
+        echo "hello";
     }
 
     /**
@@ -62,13 +63,7 @@ class TestRail
     public function configure(ArrayNodeDefinition $builder)
     {
         // TODO: Implement configure() method.
-        echo "hello";
-    }
 
-    public static function configure2()
-    {
-        // TODO: Implement configure() method.
-        echo "hello";
     }
 
     /**
