@@ -6,7 +6,7 @@
  * Time: 4:35 PM
  */
 
-namespace TestRailExtension;
+namespace Behat\TestRailExtension;
 
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
@@ -14,7 +14,7 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 
-class TestRail implements Extension
+class TestRailExtension
 {
 
     /**
