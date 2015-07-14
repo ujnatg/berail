@@ -52,7 +52,6 @@ class TestRailExtension implements Extension
     public function initialize(ExtensionManager $extensionManager)
     {
         // TODO: Implement initialize() method.
-        echo "hello";
     }
 
     /**
