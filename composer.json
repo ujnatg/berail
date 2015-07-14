@@ -1,6 +1,5 @@
 {
-    "vendor": "behat",
-    "name": "berail",
+    "name": "behat/berail",
     "description": "Behat Testrail integration",
     "version": "1.0",
     "require": {
@@ -16,8 +15,7 @@
 
     "autoload": {
       "psr-0": {
-        "Behat" : "/src",
-        "TestRailExtension": "src/"
+        "Behat/TestRailExtension" : "src"
       }
   }
 }
