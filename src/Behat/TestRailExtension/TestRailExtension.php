@@ -27,6 +27,7 @@ class TestRailExtension implements Extension
     public function process(ContainerBuilder $container)
     {
         // TODO: Implement process() method.
+        echo "process";
     }
 
     /**
@@ -37,6 +38,7 @@ class TestRailExtension implements Extension
     public function getConfigKey()
     {
         // TODO: Implement getConfigKey() method.
+        echo "getConfigKey";
     }
 
     /**
@@ -52,6 +54,7 @@ class TestRailExtension implements Extension
     public function initialize(ExtensionManager $extensionManager)
     {
         // TODO: Implement initialize() method.
+        echo "initialize";
     }
 
     /**
@@ -62,7 +65,7 @@ class TestRailExtension implements Extension
     public function configure(ArrayNodeDefinition $builder)
     {
         // TODO: Implement configure() method.
-
+        echo "configure";
     }
 
     /**
@@ -74,5 +77,6 @@ class TestRailExtension implements Extension
     public function load(ContainerBuilder $container, array $config)
     {
         // TODO: Implement load() method.
+        echo "load";
     }
 }
