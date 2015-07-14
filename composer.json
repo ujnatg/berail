@@ -1,0 +1,14 @@
+{
+    "name": "behat/berail",
+    "description": "Behat Testrail integration",
+    "require": {
+        "behat/behat": "^3.0@dev"
+    },
+    "authors": [
+        {
+            "name": "Eugen Degtiarov",
+            "email": "ujnatg@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}
