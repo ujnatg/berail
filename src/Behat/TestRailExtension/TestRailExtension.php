@@ -70,8 +70,6 @@ class TestRailExtension implements Extension
     {
         // TODO: Implement configure() method.
         echo "configure";
-
-        //var_dump($builder);
     }
 
     /**
@@ -92,9 +90,6 @@ class TestRailExtension implements Extension
             '%mink.available_javascript_sessions%',
         ));
         $definition->addTag(EventDispatcherExtension::SUBSCRIBER_TAG, array('priority' => 0));
-        echo "11111111111111111";
         $container->setDefinition('behat.listener.sessions', $definition);
-        echo "22222222222222211111111111111111";
-
     }
 }
