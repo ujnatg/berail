@@ -14,7 +14,7 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 
-class TestRailExtension
+class TestRailExtension implements Extension
 {
 
     /**
