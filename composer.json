@@ -1,6 +1,7 @@
 {
     "name": "behat/berail",
     "description": "Behat Testrail integration",
+    "type": "library",
     "require": {
         "behat/behat": "^3.0@dev"
     },
