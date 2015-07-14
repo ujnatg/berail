@@ -66,7 +66,11 @@ class TestRailExtension implements Extension
     {
         // TODO: Implement configure() method.
         echo "configure";
-        $builder->addDefaultsIfNotSet();
+        $builder->
+            children()->
+                scalarNode('test_suite_id')->
+                    info('TestSuite id')->
+        end();
     }
 
     /**
