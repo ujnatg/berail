@@ -12,11 +12,13 @@ use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
+use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 
 class TestRailExtension implements Extension
 {
-
+    const BERAIL_ID = 'berail';
     /**
      * You can modify the container here before it is dumped to PHP code.
      *
@@ -39,6 +41,7 @@ class TestRailExtension implements Extension
     {
         // TODO: Implement getConfigKey() method.
         echo "getConfigKey";
+        return self::BERAIL_ID;
     }
 
     /**
@@ -55,6 +58,7 @@ class TestRailExtension implements Extension
     {
         // TODO: Implement initialize() method.
         echo "initialize";
+
     }
 
     /**
@@ -66,11 +70,8 @@ class TestRailExtension implements Extension
     {
         // TODO: Implement configure() method.
         echo "configure";
-        $builder->
-            children()->
-                scalarNode('test_suite_id')->
-                    info('TestSuite id')->
-        end();
+
+        //var_dump($builder);
     }
 
     /**
@@ -82,6 +83,18 @@ class TestRailExtension implements Extension
     public function load(ContainerBuilder $container, array $config)
     {
         // TODO: Implement load() method.
-        echo "load";
+        echo "load\n";
+
+        $definition = new Definition('Behat\TestRailExtension\TestRailListener', array(
+            new Reference('mink'),
+            '%mink.default_session%',
+            '%mink.javascript_session%',
+            '%mink.available_javascript_sessions%',
+        ));
+        $definition->addTag(EventDispatcherExtension::SUBSCRIBER_TAG, array('priority' => 0));
+        echo "11111111111111111";
+        $container->setDefinition('behat.listener.sessions', $definition);
+        echo "22222222222222211111111111111111";
+
     }
 }
