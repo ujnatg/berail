@@ -114,7 +114,6 @@ class TestRailListener implements EventSubscriberInterface
     }
 
     private function resolvResult($behatResult){
-        var_dump($behatResult);
         if($behatResult->isPassed()) {
             return "passed";
         }else{
