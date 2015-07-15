@@ -97,7 +97,7 @@ class TestRailListener implements EventSubscriberInterface
         TestRailApiWrapper::create_new_testrun();
     }
 
-    public function showStepResponse(ScenarioTested $event)
+    public function getScenarioResult(ScenarioTested $event)
     {
         // get scenario id
         foreach($this->testcases as $key => $value){
