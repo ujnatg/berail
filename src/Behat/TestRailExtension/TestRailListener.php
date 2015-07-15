@@ -7,7 +7,13 @@
  */
 namespace Behat\TestRailExtension;
 
+use Behat\Behat\Gherkin\Specification\Locator\FilesystemFeatureLocator;
+use Behat\Behat\Gherkin\Specification\Locator\FilesystemScenariosListLocator;
+use Behat\Gherkin\Keywords\CachedArrayKeywords;
+use Behat\Gherkin\Loader\ArrayLoader;
+use Behat\Gherkin\Parser;
 use Behat\Mink\Mink;
+use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\EventDispatcher\Event\StepTested;
@@ -16,11 +22,17 @@ use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioLikeTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
 use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
+use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTested;
 use Behat\Testwork\ServiceContainer\Exception\ProcessingException;
 use Behat\Testwork\Suite\Exception\SuiteConfigurationException;
 use Behat\Testwork\Suite\Suite;
 use Behat\Gherkin\Node\ScenarioNode;
-
+use Behat\Behat\Gherkin\Specification\LazyFeatureIterator;
+use Behat\Gherkin\Gherkin;
+use Behat\Gherkin\Node\FeatureNode;
+use Behat\Gherkin\Loader\GherkinFileLoader;
+use Behat\Gherkin\Lexer;
+use Behat\Gherkin\Keywords\ArrayKeywords;
 
 class TestRailListener implements EventSubscriberInterface
 {
@@ -57,12 +69,37 @@ class TestRailListener implements EventSubscriberInterface
         return array(
 //            ScenarioTested::BEFORE   => array('prepareDefaultMinkSession', 10),
 //            ExampleTested::BEFORE    => array('prepareDefaultMinkSession', 10),
-//            ExerciseCompleted::AFTER => array('tearDownMinkSessions', -10),
+            BeforeSuiteTested::BEFORE => array('showStepResponse2', -10),
             StepTested::AFTER => array('showStepResponse', -10)
 
         );
     }
 
+    public function showStepResponse2(BeforeSuiteTested $event)
+    {
+        $gerkin = new Gherkin();
+        $base_path = $event->getSuite()->getSetting("paths")["features"];
+//        $base_path = "";
+        //print $base_path . "\n";
+        $gerkin->setBasePath($base_path);
+        $i18nPath = dirname(dirname(dirname(dirname(dirname(__DIR__))))) . DIRECTORY_SEPARATOR . 'behat' . DIRECTORY_SEPARATOR . 'gherkin' . DIRECTORY_SEPARATOR . 'i18n.php';
+        $gerkin->addLoader(new GherkinFileLoader(new Parser(new Lexer(new CachedArrayKeywords($i18nPath)))));
+        $list = (new FilesystemFeatureLocator($gerkin, $base_path))->locateSpecifications($event->getSuite(), $base_path);
+//        foreach ($item as $list){
+//            print $list->next();
+//        }
+        $list->rewind();
+        while($list->valid())
+        {
+            print("->>>>>>>>>>>>>" . $list->current()->getTitle());
+            // read scenarious from feaure
+            foreach($list->current()->getScenarios() as $scenario){
+                print($scenario->getTitle());
+            }
+            $list->next();
+        }
+
+    }
 
     /**
      * Shows last response of failed step with preconfigured command.

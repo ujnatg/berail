@@ -58,7 +58,6 @@ class TestRailExtension implements Extension
     {
         // TODO: Implement initialize() method.
         echo "initialize";
-
     }
 
     /**
