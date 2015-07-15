@@ -5,7 +5,9 @@
  * Date: 7/9/15
  * Time: 2:42 AM
  */
-require "testrail.php";
+namespace Behat\TestRailExtension;
+
+use Behat\TestRailExtension\TestRailAPIClient;
 
 /**
  * Class TestRailApiWrapper
@@ -89,6 +91,55 @@ class TestRailApiWrapper
                 "comment" => $defect_description,
                 "defects" => "")]);
         $response = TestRailApiWrapper::$testrail_context->send_post("add_results_for_cases/" . TestRailApiWrapper::$testrail_testrun_id, $data);
+    }
+
+    /**
+     *
+     */
+    public static function create_new_testsuite($testsuite_name)
+    {
+        # Build dict
+        $data = array(
+            "name" => time() . $testsuite_name,
+            "description" => TestRailApiWrapper::$testrail_testrun_description);
+        $response = TestRailApiWrapper::$testrail_context->send_post("add_suite/" . TestRailApiWrapper::$testrail_project_id, $data);
+        TestRailApiWrapper::$testrail_testplan_id = $response["id"];
+        return $response["id"];
+    }
+
+    /**
+     *
+     */
+    public static function create_new_testcase($testcase_name, $section_id)
+    {
+        # Build dict
+        $data = array(
+            "title" => $testcase_name);
+        $response = TestRailApiWrapper::$testrail_context->send_post("add_case/" . $section_id, $data);
+        return $response["id"];
+    }
+
+    public static function create_new_section($testsection_name)
+    {
+        # Build dict
+        print("----------------------\n");
+        $data = array(
+            "name" => $testsection_name,
+            "suite_id" => TestRailApiWrapper::$testrail_testplan_id);
+        $response = TestRailApiWrapper::$testrail_context->send_post("add_section/" . TestRailApiWrapper::$testrail_project_id, $data);
+        return $response["id"];
+    }
+
+    /**
+     *
+     */
+    public static function get_sections()
+    {
+        print("\n" . TestRailApiWrapper::$testrail_project_id);
+        print("\n" . TestRailApiWrapper::$testrail_testplan_id);
+        $response = TestRailApiWrapper::$testrail_context->send_get("get_sections/" . TestRailApiWrapper::$testrail_project_id . "&suite_id=" . TestRailApiWrapper::$testrail_testplan_id);
+
+        return $response;
     }
 
     private static $testrail_context;
