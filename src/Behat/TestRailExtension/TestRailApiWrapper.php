@@ -24,7 +24,13 @@ class TestRailApiWrapper
      * @param $testrail_testplain_id
      * @param $testrail_log_results
      */
-    public static function set_testrun_context($testrail_username, $testrail_password, $testrail_url, $testrail_testrun_name, $testrail_testrun_description, $testrail_project_id, $testrail_testplain_id, $testrail_log_results)
+    public static function set_testrun_context($testrail_username,
+                                               $testrail_password,
+                                               $testrail_url,
+                                               $testrail_testrun_name,
+                                               $testrail_testrun_description,
+                                               $testrail_project_id,
+                                               $testrail_testplain_id)
     {
         TestRailApiWrapper::$testrail_username = $testrail_username;
         TestRailApiWrapper::$testrail_password = $testrail_password;

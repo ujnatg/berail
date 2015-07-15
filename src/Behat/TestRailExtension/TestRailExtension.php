@@ -76,8 +76,20 @@ class TestRailExtension implements Extension
      */
     public function load(ContainerBuilder $container, array $config)
     {
-        $definition = new Definition('Behat\TestRailExtension\TestRailListener');
-        $definition->addTag(EventDispatcherExtension::SUBSCRIBER_TAG, array('priority' => 0));
-        $container->setDefinition('behat.listener.sessions', $definition);
+        if ($config['log_results']) {
+            echo "888888888888888888888";
+            echo $config['testsuite_id'];
+            $definition = new Definition('Behat\TestRailExtension\TestRailListener',array(
+                $config['testrail_username'],
+                $config['testrail_password'],
+                $config['testrail_url'],
+                $config['testrun_basename'],
+                $config['testrun_description'],
+                $config['project_id'],
+                $config['testsuite_id']
+            ));
+            $definition->addTag(EventDispatcherExtension::SUBSCRIBER_TAG, array('priority' => 0));
+            $container->setDefinition('behat.listener.sessions', $definition);
+        }
     }
 }

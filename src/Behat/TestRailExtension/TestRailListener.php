@@ -39,9 +39,16 @@ use Behat\TestRailExtension\TestRailApiWrapper;
 class TestRailListener implements EventSubscriberInterface
 {
 //    public function __construct(Mink $mink, $defaultSession, $javascriptSession, array $availableJavascriptSessions = array())
-    public function __construct()
+    public function __construct($testrail_username, $testrail_password, $testrail_url, $testrun_basename, $testrun_description, $project_id, $testsuite_id)
     {
         $this->testcases=array();
+        $this->testrail_username=$testrail_username;
+        $this->testrail_password=$testrail_password;
+        $this->testrail_url=$testrail_url;
+        $this->testrun_basename=$testrun_basename;
+        $this->testrun_description=$testrun_description;
+        $this->project_id=$project_id;
+        $this->testsuite_id=$testsuite_id;
     }
 
     /**
@@ -58,7 +65,16 @@ class TestRailListener implements EventSubscriberInterface
 
     public function setUpTestRun(BeforeSuiteTested $event)
     {
-        TestRailApiWrapper::set_testrun_context("*****************", "**********", "**********************************", "base name", "description", 59, 1802, false);
+        TestRailApiWrapper::set_testrun_context(
+            $this->testrail_username,
+            $this->testrail_password,
+            $this->testrail_url,
+            $this->testrun_basename,
+            $this->testrun_description,
+            $this->project_id,
+            $this->testsuite_id
+        );
+
         $suite_id=TestRailApiWrapper::create_new_testsuite(" FOX PHP");
         $gerkin = new Gherkin();
         $base_path = $event->getSuite()->getSetting("paths")["features"];
