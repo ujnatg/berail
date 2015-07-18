@@ -94,6 +94,21 @@ class TestRailListener implements EventSubscriberInterface
             }
     }
 
+    public function getScenarioResult(ScenarioTested $event)
+    {
+        // get scenario id
+        foreach($this->testcases as $key => $value){
+            if ($value==$event->getScenario()->getTitle()){
+                TestRailApiWrapper::log_testcase_result($key, $this->resolvResult($event->getTestResult()), "description");
+            }
+        }
+        print($event->getScenario()->getTitle());
+        $testResult = $event->getTestResult();
+        if (!$testResult instanceof ExceptionResult) {
+            return;
+        }
+    }
+
     private function get_result_by_array(){
         if (in_array(99, $this->results_array)){
             return "failed";
