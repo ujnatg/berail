@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: eugen.degtiarov
- * Date: 7/9/15
- * Time: 2:42 AM
- */
 namespace Behat\TestRailExtension;
 
 use Behat\TestRailExtension\TestRailAPIClient;
@@ -128,7 +122,6 @@ class TestRailApiWrapper
     public static function create_new_section($testsection_name)
     {
         # Build dict
-        print("----------------------\n");
         $data = array(
             "name" => $testsection_name,
             "suite_id" => TestRailApiWrapper::$testrail_testplan_id);

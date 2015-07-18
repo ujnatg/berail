@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: yevhen
- * Date: 7/14/15
- * Time: 10:08 PM
- */
 namespace Behat\TestRailExtension;
 
 use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
@@ -102,7 +96,6 @@ class TestRailListener implements EventSubscriberInterface
                 TestRailApiWrapper::log_testcase_result($key, $this->resolvResult($event->getTestResult()), "description");
             }
         }
-        print($event->getScenario()->getTitle());
         $testResult = $event->getTestResult();
         if (!$testResult instanceof ExceptionResult) {
             return;
@@ -137,7 +130,7 @@ class TestRailListener implements EventSubscriberInterface
         print("Rails logger initialised to use new suite id\n");
         $this->initRails();
 
-        $suite_id=TestRailApiWrapper::create_new_testsuite(" FOX PHP");
+        $suite_id=TestRailApiWrapper::create_new_testsuite(" " . $this->testrun_basename);
         $gerkin = new Gherkin();
         $base_path = $event->getSuite()->getSetting("paths")["features"];
         $gerkin->setBasePath($base_path);
