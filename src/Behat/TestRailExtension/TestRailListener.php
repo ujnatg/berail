@@ -45,7 +45,7 @@ use Behat\TestRailExtension\TestRailApiWrapper;
 class TestRailListener implements EventSubscriberInterface
 {
 //    public function __construct(Mink $mink, $defaultSession, $javascriptSession, array $availableJavascriptSessions = array())
-    public function __construct($testrail_username, $testrail_password, $testrail_url, $testrun_basename, $testrun_description, $project_id, $testsuite_id)
+    public function __construct($testrail_username, $testrail_password, $testrail_url, $testrun_basename, $testrun_description, $project_id, $testsuite_id, $create_new_suite)
     {
         $this->testcases=array();
         $this->testrail_username=$testrail_username;
@@ -56,7 +56,7 @@ class TestRailListener implements EventSubscriberInterface
         $this->project_id=$project_id;
         $this->testsuite_id=$testsuite_id;
         $this->results_array=[];
-        TestRailListener::$create_new_suite=false;
+        TestRailListener::$create_new_suite=$create_new_suite;
     }
 
     /**
