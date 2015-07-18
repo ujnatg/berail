@@ -83,11 +83,7 @@ class TestRailListener implements EventSubscriberInterface
     public function getStepResult(AfterStepTested $event)
     {
         array_push($this->results_array, $event->getTestResult()->getResultCode());
-        var_dump($this->results_array);
-        var_dump($event->getStep()->getText());
-        if (preg_match("/I report case result \"([0-9]+)\"$/", $event->getStep()->getText(), $output_array)
-            &&
-            ($event->getStep()->getKeyword()=='Then'))
+        if (preg_match("/I report case result \"([0-9]+)\"$/", $event->getStep()->getText(), $output_array))
             {
                 $key = $output_array[1];
                 print("Scenario result for case id #" . $key . " ->" . $this->get_result_by_array() . "\n");
