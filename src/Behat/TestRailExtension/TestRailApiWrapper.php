@@ -22,7 +22,6 @@ class TestRailApiWrapper
      * @param $testrail_testrun_description
      * @param $testrail_project_id
      * @param $testrail_testplain_id
-     * @param $testrail_log_results
      */
     public static function set_testrun_context($testrail_username,
                                                $testrail_password,
@@ -35,7 +34,7 @@ class TestRailApiWrapper
         TestRailApiWrapper::$testrail_username = $testrail_username;
         TestRailApiWrapper::$testrail_password = $testrail_password;
         TestRailApiWrapper::$testrail_url = $testrail_url;
-        TestRailApiWrapper::$testrail_log_results = $testrail_log_results;
+//        TestRailApiWrapper::$testrail_log_results = $testrail_log_results;
         TestRailApiWrapper::$testrail_testplan_id = $testrail_testplain_id;
         TestRailApiWrapper::$testrail_project_id = $testrail_project_id;
         TestRailApiWrapper::$testrail_testrun_name = $testrail_testrun_name . " " . time();
@@ -60,6 +59,7 @@ class TestRailApiWrapper
             "include_all" => true);
         $response = TestRailApiWrapper::$testrail_context->send_post("add_run/" . TestRailApiWrapper::$testrail_project_id, $data);
         TestRailApiWrapper::$testrail_testrun_id = $response["id"];
+        return $response["id"];
     }
 
     /**

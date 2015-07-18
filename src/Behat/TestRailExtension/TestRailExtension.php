@@ -77,8 +77,7 @@ class TestRailExtension implements Extension
     public function load(ContainerBuilder $container, array $config)
     {
         if ($config['log_results']) {
-            echo "888888888888888888888";
-            echo $config['testsuite_id'];
+            echo "TestRail logger Enabled\n";
             $definition = new Definition('Behat\TestRailExtension\TestRailListener',array(
                 $config['testrail_username'],
                 $config['testrail_password'],
