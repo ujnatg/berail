@@ -123,7 +123,7 @@ class TestRailListener implements EventSubscriberInterface
 
     public function setUpTestRunBasedOnExistingTestSuite(BeforeSuiteTested $event){
         print("Rails logger initialised to use " . $this->testsuite_id . " suite id\n");
-        $this->initRails($event->getEnvironment());
+        $this->initRails();
         print("Testrun #" . TestRailApiWrapper::create_new_testrun() . " created\n");
     }
 
@@ -131,7 +131,6 @@ class TestRailListener implements EventSubscriberInterface
     {
         print("Rails logger initialised to use new suite id\n");
         $this->initRails();
-
         $suite_id=TestRailApiWrapper::create_new_testsuite(" " . $this->testrun_basename);
         $gerkin = new Gherkin();
         $base_path = $event->getSuite()->getSetting("paths")["features"];
