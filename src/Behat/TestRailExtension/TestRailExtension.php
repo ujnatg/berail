@@ -69,7 +69,7 @@ class TestRailExtension implements Extension
      */
     public function load(ContainerBuilder $container, array $config)
     {
-        if ($config['log_results']) {
+        if ($_ENV['LOG_TESTRAIL_RESULTS']=='TRUE') {
             echo "TestRail logger Enabled\n";
             $definition = new Definition('Behat\TestRailExtension\TestRailListener',array(
                 $config['testrail_username'],
@@ -84,6 +84,9 @@ class TestRailExtension implements Extension
             ));
             $definition->addTag(EventDispatcherExtension::SUBSCRIBER_TAG, array('priority' => 0));
             $container->setDefinition('behat.listener.sessions', $definition);
+        }
+        else{
+            echo "TestRail logger Disabled\n";
         }
     }
 }
