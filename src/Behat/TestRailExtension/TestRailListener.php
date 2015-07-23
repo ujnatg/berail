@@ -35,11 +35,12 @@ use Behat\Gherkin\Loader\GherkinFileLoader;
 use Behat\Gherkin\Lexer;
 use Behat\Gherkin\Keywords\ArrayKeywords;
 use Behat\TestRailExtension\TestRailApiWrapper;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 class TestRailListener implements EventSubscriberInterface
 {
 //    public function __construct(Mink $mink, $defaultSession, $javascriptSession, array $availableJavascriptSessions = array())
-    public function __construct($testrail_username, $testrail_password, $testrail_url, $testrun_basename, $testrun_description, $project_id, $testsuite_id, $create_new_suite)
+    public function __construct($testrail_username, $testrail_password, $testrail_url, $testrun_basename, $testrun_description, $project_id, $testsuite_id, $create_new_suite, $container)
     {
         $this->testcases=array();
         $this->testrail_username=$testrail_username;
@@ -50,6 +51,7 @@ class TestRailListener implements EventSubscriberInterface
         $this->project_id=$project_id;
         $this->testsuite_id=$testsuite_id;
         $this->results_array=[];
+        $this->container=$container;
         TestRailListener::$create_new_suite=$create_new_suite;
     }
 
@@ -121,7 +123,7 @@ class TestRailListener implements EventSubscriberInterface
 
     public function setUpTestRunBasedOnExistingTestSuite(BeforeSuiteTested $event){
         print("Rails logger initialised to use " . $this->testsuite_id . " suite id\n");
-        $this->initRails();
+        $this->initRails($event->getEnvironment());
         print("Testrun #" . TestRailApiWrapper::create_new_testrun() . " created\n");
     }
 
@@ -154,7 +156,6 @@ class TestRailListener implements EventSubscriberInterface
 
     public function showStepResponse(ScenarioTested $event)
     {
-        var_dump($event);
         // get scenario id
         foreach($this->testcases as $key => $value){
             if ($value==$event->getScenario()->getTitle()){
@@ -170,11 +171,12 @@ class TestRailListener implements EventSubscriberInterface
     }
 
     private function initRails(){
+        $param = $this->container->getParameter("mink.parameters")["browser_name"];
         TestRailApiWrapper::set_testrun_context(
             $this->testrail_username,
             $this->testrail_password,
             $this->testrail_url,
-            $this->testrun_basename,
+            " " . $param . " " . $this->testrun_basename,
             $this->testrun_description,
             $this->project_id,
             $this->testsuite_id

@@ -31,7 +31,7 @@ class TestRailApiWrapper
 //        TestRailApiWrapper::$testrail_log_results = $testrail_log_results;
         TestRailApiWrapper::$testrail_testplan_id = $testrail_testplain_id;
         TestRailApiWrapper::$testrail_project_id = $testrail_project_id;
-        TestRailApiWrapper::$testrail_testrun_name = $testrail_testrun_name . " " . time();
+        TestRailApiWrapper::$testrail_testrun_name = date(c, time())  . " " . $testrail_testrun_name;
         TestRailApiWrapper::$testrail_testrun_description = $testrail_testrun_description;
 
         TestRailApiWrapper::$testrail_context = new TestRailAPIClient(TestRailApiWrapper::$testrail_url);

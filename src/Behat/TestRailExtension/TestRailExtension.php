@@ -79,7 +79,8 @@ class TestRailExtension implements Extension
                 $config['testrun_description'],
                 $config['project_id'],
                 $config['testsuite_id'],
-                $config['create_new_suite']
+                $config['create_new_suite'],
+                $container
             ));
             $definition->addTag(EventDispatcherExtension::SUBSCRIBER_TAG, array('priority' => 0));
             $container->setDefinition('behat.listener.sessions', $definition);
