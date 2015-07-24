@@ -4,6 +4,7 @@ namespace Behat\TestRailExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -69,7 +70,14 @@ class TestRailExtension implements Extension
      */
     public function load(ContainerBuilder $container, array $config)
     {
-        if (getenv('LOG_TESTRAIL_RESULTS')=='TRUE') {
+        try{
+            $log_testrail_results=getenv('LOG_TESTRAIL_RESULTS');
+        }
+        catch (Exception $e)
+        {
+            $log_testrail_results='FALSE';
+        }
+        if ($log_testrail_results=='TRUE') {
             echo "TestRail logger Enabled\n";
             $definition = new Definition('Behat\TestRailExtension\TestRailListener',array(
                 $config['testrail_username'],
