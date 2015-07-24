@@ -69,7 +69,7 @@ class TestRailExtension implements Extension
      */
     public function load(ContainerBuilder $container, array $config)
     {
-        if ($_ENV['LOG_TESTRAIL_RESULTS']=='TRUE') {
+        if (getenv('LOG_TESTRAIL_RESULTS')=='TRUE') {
             echo "TestRail logger Enabled\n";
             $definition = new Definition('Behat\TestRailExtension\TestRailListener',array(
                 $config['testrail_username'],
