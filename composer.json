@@ -1,5 +1,5 @@
 {
-    "name": "behat/berail",
+    "name": "applauseauto/berail",
     "description": "Behat Testrail integration",
     "type": "library",
     "require": {
