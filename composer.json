@@ -1,9 +1,9 @@
 {
-    "name": "ApplauseAuto/berail",
+    "name": "applauseauto/berail",
     "description": "Behat Testrail integration",
     "type": "library",
     "require": {
-        "behat/behat": "3.0.0"
+        "behat/behat": "~3.0"
     },
     "authors": [
         {
