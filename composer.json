@@ -3,7 +3,7 @@
     "description": "Behat Testrail integration",
     "type": "library",
     "require": {
-        "behat/behat": "~3.0"
+        "behat/behat": "2.4.6"
     },
     "authors": [
         {
@@ -11,7 +11,7 @@
             "email": "ujnatg@gmail.com"
         }
     ],
-    
+
     "autoload": {
       "psr-0": {
         "Behat\\TestRailExtension" : "src/"
