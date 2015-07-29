@@ -3,7 +3,7 @@
     "description": "Behat Testrail integration",
     "type": "library",
     "require": {
-        "behat/behat": "^3.0@dev"
+        "behat/behat": "~3.0@dev"
     },
     "authors": [
         {
