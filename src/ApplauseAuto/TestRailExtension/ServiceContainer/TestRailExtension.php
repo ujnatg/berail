@@ -6,7 +6,7 @@
  * Time: 4:35 PM
  */
 
-namespace Behat\TestRailExtension;
+namespace ApplauseAuto\TestRailExtension;
 
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
@@ -79,7 +79,7 @@ class TestRailExtension implements Extension
         if ($config['log_results']) {
             echo "888888888888888888888";
             echo $config['testsuite_id'];
-            $definition = new Definition('Behat\TestRailExtension\TestRailListener',array(
+            $definition = new Definition('ApplauseAuto\TestRailExtension\TestRailListener',array(
                 $config['testrail_username'],
                 $config['testrail_password'],
                 $config['testrail_url'],

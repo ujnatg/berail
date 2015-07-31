@@ -14,7 +14,7 @@
 
     "autoload": {
       "psr-0": {
-        "Behat\\TestRailExtension" : "src/"
+        "ApplauseAuto\\TestRailExtension" : "src/"
       }
   }
 }
