@@ -29,7 +29,7 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Loader\GherkinFileLoader;
 use Behat\Gherkin\Lexer;
 use Behat\Gherkin\Keywords\ArrayKeywords;
-use Behat\TestRailExtension\TestRailApiWrapper;
+use ApplauseAuto\TestRailExtension\TestRailApiWrapper;
 
 class TestRailListener implements EventSubscriberInterface
 {
