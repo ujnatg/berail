@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: yevhen
- * Date: 7/14/15
- * Time: 4:35 PM
- */
-
 namespace ApplauseAuto\TestRailExtension;
 
 use Behat\Testwork\ServiceContainer\Extension;
