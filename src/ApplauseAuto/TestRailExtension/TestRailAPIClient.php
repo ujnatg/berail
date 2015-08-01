@@ -11,7 +11,7 @@
  * Copyright Gurock Software GmbH. See license.md for details.
  */
 
-namespace Behat\TestRailExtension;
+namespace ApplauseAuto\TestRailExtension;
 
 use Behat\TestRailExtension\TestRailAPIException;
 

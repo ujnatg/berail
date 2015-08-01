@@ -5,9 +5,9 @@
  * Date: 7/9/15
  * Time: 2:42 AM
  */
-namespace Behat\TestRailExtension;
+namespace ApplauseAuto\TestRailExtension;
 
-use Behat\TestRailExtension\TestRailAPIClient;
+use ApplauseAuto\TestRailExtension\TestRailAPIClient;
 
 /**
  * Class TestRailApiWrapper

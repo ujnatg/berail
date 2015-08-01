@@ -1,5 +1,5 @@
 <?php
-namespace Behat\TestRailExtension;
+namespace ApplauseAuto\TestRailExtension;
 
 class TestRailAPIException extends Exception
 {

@@ -1,7 +1,7 @@
 {
     "name": "applauseauto/berail",
     "description": "Behat Testrail integration",
-    "type": "library",
+    "type": "behat-extension",
     "require": {
         "behat/behat": "~3.0"
     },

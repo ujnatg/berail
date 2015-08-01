@@ -1,11 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: yevhen
- * Date: 7/14/15
- * Time: 10:08 PM
- */
-namespace Behat\TestRailExtension;
+
+namespace ApplauseAuto\TestRailExtension;
 
 use Behat\Behat\Gherkin\Specification\Locator\FilesystemFeatureLocator;
 use Behat\Behat\Gherkin\Specification\Locator\FilesystemScenariosListLocator;
