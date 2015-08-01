@@ -59,6 +59,20 @@ class TestRailExtension implements Extension
     public function configure(ArrayNodeDefinition $builder)
     {
         // TODO: Implement configure() method.
+        {
+            $builder
+                ->children()
+                ->scalarNode('testrail_username')->end()
+                ->scalarNode('testrail_password')->end()
+                ->scalarNode('testrail_url')->end()
+                ->scalarNode('testrun_basename')->end()
+                ->scalarNode('testrun_description')->end()
+                ->scalarNode('project_id')->end()
+                ->scalarNode('testsuite_id')->end()
+                ->booleanNode('create_new_suite')->end()
+                ->end();
+
+        }
     }
 
     /**
@@ -70,7 +84,7 @@ class TestRailExtension implements Extension
     public function load(ContainerBuilder $container, array $config)
     {
         if ($config['log_results']) {
-            echo "888888888888888888888";
+            echo "Starting berail plugin\n";
             echo $config['testsuite_id'];
             $definition = new Definition('ApplauseAuto\TestRailExtension\TestRailListener',array(
                 $config['testrail_username'],
