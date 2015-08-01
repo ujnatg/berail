@@ -83,7 +83,17 @@ class TestRailExtension implements Extension
      */
     public function load(ContainerBuilder $container, array $config)
     {
-        if ($config['log_results']) {
+        try{
+            $log_testrail_results=getenv('LOG_TESTRAIL_RESULTS');
+        }
+        catch (Exception $e)
+        {
+            $log_testrail_results='FALSE';
+        }
+        if ($log_testrail_results=='TRUE') {
+            echo "TestRail logger Enabled\n";
+//
+//            if ($config['log_results']) {
             echo "Starting berail plugin\n";
             echo $config['testsuite_id'];
             $definition = new Definition('ApplauseAuto\TestRailExtension\TestRailListener',array(
@@ -97,6 +107,8 @@ class TestRailExtension implements Extension
             ));
             $definition->addTag(EventDispatcherExtension::SUBSCRIBER_TAG, array('priority' => 0));
             $container->setDefinition('behat.listener.sessions', $definition);
+        } else {
+            echo "TestRail logger Disabled by env variable\n";
         }
     }
 }
