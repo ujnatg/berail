@@ -13,7 +13,7 @@
 
 namespace ApplauseAuto\TestRailExtension;
 
-use Behat\TestRailExtension\TestRailAPIException;
+use ApplauseAuto\TestRailExtension\TestRailAPIException;
 
 class TestRailAPIClient
 {

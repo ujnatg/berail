@@ -1,9 +1,14 @@
 <?php
-
 namespace ApplauseAuto\TestRailExtension;
 
+use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
+use Behat\Behat\EventDispatcher\Event\BeforeScenarioTested;
 use Behat\Behat\Gherkin\Specification\Locator\FilesystemFeatureLocator;
 use Behat\Behat\Gherkin\Specification\Locator\FilesystemScenariosListLocator;
+use Behat\Behat\Hook\Call\AfterScenario;
+use Behat\Behat\Hook\Call\BeforeScenario;
+use Behat\Behat\Hook\Scope\AfterScenarioScope;
+use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Gherkin\Keywords\CachedArrayKeywords;
 use Behat\Gherkin\Loader\ArrayLoader;
 use Behat\Gherkin\Parser;
@@ -30,11 +35,12 @@ use Behat\Gherkin\Loader\GherkinFileLoader;
 use Behat\Gherkin\Lexer;
 use Behat\Gherkin\Keywords\ArrayKeywords;
 use ApplauseAuto\TestRailExtension\TestRailApiWrapper;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 class TestRailListener implements EventSubscriberInterface
 {
 //    public function __construct(Mink $mink, $defaultSession, $javascriptSession, array $availableJavascriptSessions = array())
-    public function __construct($testrail_username, $testrail_password, $testrail_url, $testrun_basename, $testrun_description, $project_id, $testsuite_id)
+    public function __construct($testrail_username, $testrail_password, $testrail_url, $testrun_basename, $testrun_description, $project_id, $testsuite_id, $create_new_suite, $container)
     {
         $this->testcases=array();
         $this->testrail_username=$testrail_username;
@@ -44,6 +50,9 @@ class TestRailListener implements EventSubscriberInterface
         $this->testrun_description=$testrun_description;
         $this->project_id=$project_id;
         $this->testsuite_id=$testsuite_id;
+        $this->results_array=[];
+        $this->container=$container;
+        TestRailListener::$create_new_suite=$create_new_suite;
     }
 
     /**
@@ -51,26 +60,89 @@ class TestRailListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            BeforeSuiteTested::BEFORE => array('setUpTestRun', -10),
-            ScenarioTested::AFTER => array('getScenarioResult', -10)
+        $subscribers=[];
+        // configure subscribers
+        if (TestRailListener::$create_new_suite) {
+            $subscribers[BeforeSuiteTested::BEFORE] = array('setUpTestRun', -10);
+            $subscribers[ScenarioTested::AFTER] = array('getScenarioResult', -10);
+        }
+        if (!TestRailListener::$create_new_suite) {
+            $subscribers[BeforeSuiteTested::BEFORE] = array('setUpTestRunBasedOnExistingTestSuite', -10);
+            $subscribers[AfterStepTested::AFTER] = array('getStepResult', -10);
+        }
+        return $subscribers;
+    }
 
-        );
+
+    private $results_array;
+
+    public function getStepResult(AfterStepTested $event)
+    {
+        array_push($this->results_array, $event->getTestResult()->getResultCode());
+        if (preg_match("/I report case result \"([0-9]+)\"$/", $event->getStep()->getText(), $output_array))
+        {
+            $key = $output_array[1];
+            print("Scenario result for case id #" . $key . " ->" . $this->get_result_by_array() . "\n");
+            TestRailApiWrapper::log_testcase_result($key, $this->get_result_by_array(), "description");
+
+            // Clean results
+            $this->results_array=[];
+        }
+    }
+
+    public function getScenarioResult(ScenarioTested $event)
+    {
+        // get scenario id
+        foreach($this->testcases as $key => $value){
+            if ($value==$event->getScenario()->getTitle()){
+                TestRailApiWrapper::log_testcase_result($key, $this->resolvResult($event->getTestResult()), "description");
+            }
+        }
+        $testResult = $event->getTestResult();
+        if (!$testResult instanceof ExceptionResult) {
+            return;
+        }
+    }
+
+    private function get_result_by_array(){
+        if (in_array(99, $this->results_array)){
+            return "failed";
+        }
+        if (in_array(20, $this->results_array)||in_array(2, $this->results_array)) {
+            return "retest";
+        }
+        if (in_array(10, $this->results_array)) {
+            return "skipped";
+        }
+        foreach($this->results_array as $step_result)
+        {
+            if ($step_result!=0) return "failed";
+        }
+        return "passed";
+    }
+
+    public function setUpTestRunBasedOnExistingTestSuite(BeforeSuiteTested $event){
+        $run_id=getenv('LOG_TESTRAIL_RESULTS_TESTRUN_ID');
+        print('Runid from!!!!!!!!!! env\n' . $run_id);
+        print("Rails logger initialised to use " . $this->testsuite_id . " suite id\n");
+        $this->initRails();
+        $run_id='';
+        if (getenv('LOG_TESTRAIL_RESULTS_TESTRUN_ID')!=false){
+            $run_id=getenv('LOG_TESTRAIL_RESULTS_TESTRUN_ID');
+            print('Runid from env\n');
+            TestRailApiWrapper::set_runid($run_id);
+        }
+        else{
+            $run_id=TestRailApiWrapper::create_new_testrun();
+        };
+        print("Testrun #" . $run_id . " created\n");
     }
 
     public function setUpTestRun(BeforeSuiteTested $event)
     {
-        TestRailApiWrapper::set_testrun_context(
-            $this->testrail_username,
-            $this->testrail_password,
-            $this->testrail_url,
-            $this->testrun_basename,
-            $this->testrun_description,
-            $this->project_id,
-            $this->testsuite_id
-        );
-
-        $suite_id=TestRailApiWrapper::create_new_testsuite(" FOX PHP");
+        print("Rails logger initialised to use new suite id\n");
+        $this->initRails();
+        $suite_id=TestRailApiWrapper::create_new_testsuite(" " . $this->testrun_basename);
         $gerkin = new Gherkin();
         $base_path = $event->getSuite()->getSetting("paths")["features"];
         $gerkin->setBasePath($base_path);
@@ -92,7 +164,7 @@ class TestRailListener implements EventSubscriberInterface
         TestRailApiWrapper::create_new_testrun();
     }
 
-    public function getScenarioResult(ScenarioTested $event)
+    public function showStepResponse(ScenarioTested $event)
     {
         // get scenario id
         foreach($this->testcases as $key => $value){
@@ -108,6 +180,19 @@ class TestRailListener implements EventSubscriberInterface
         }
     }
 
+    private function initRails(){
+        $param = $this->container->getParameter("mink.parameters")["browser_name"];
+        TestRailApiWrapper::set_testrun_context(
+            $this->testrail_username,
+            $this->testrail_password,
+            $this->testrail_url,
+            " " . $param . " " . $this->testrun_basename,
+            $this->testrun_description,
+            $this->project_id,
+            $this->testsuite_id
+        );
+    }
+
     private function resolvResult($behatResult){
         if($behatResult->isPassed()) {
             return "passed";
@@ -115,6 +200,8 @@ class TestRailListener implements EventSubscriberInterface
             return "failed";}
     }
 
+
+    private static $create_new_suite;
 
     private $testcases;
 }

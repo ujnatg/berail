@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: eugen.degtiarov
- * Date: 7/9/15
- * Time: 2:42 AM
- */
 namespace ApplauseAuto\TestRailExtension;
 
 use ApplauseAuto\TestRailExtension\TestRailAPIClient;
@@ -22,7 +16,6 @@ class TestRailApiWrapper
      * @param $testrail_testrun_description
      * @param $testrail_project_id
      * @param $testrail_testplain_id
-     * @param $testrail_log_results
      */
     public static function set_testrun_context($testrail_username,
                                                $testrail_password,
@@ -35,10 +28,10 @@ class TestRailApiWrapper
         TestRailApiWrapper::$testrail_username = $testrail_username;
         TestRailApiWrapper::$testrail_password = $testrail_password;
         TestRailApiWrapper::$testrail_url = $testrail_url;
-        TestRailApiWrapper::$testrail_log_results = $testrail_log_results;
+//        TestRailApiWrapper::$testrail_log_results = $testrail_log_results;
         TestRailApiWrapper::$testrail_testplan_id = $testrail_testplain_id;
         TestRailApiWrapper::$testrail_project_id = $testrail_project_id;
-        TestRailApiWrapper::$testrail_testrun_name = $testrail_testrun_name . " " . time();
+        TestRailApiWrapper::$testrail_testrun_name = date('c', time())  . " " . $testrail_testrun_name;
         TestRailApiWrapper::$testrail_testrun_description = $testrail_testrun_description;
 
         TestRailApiWrapper::$testrail_context = new TestRailAPIClient(TestRailApiWrapper::$testrail_url);
@@ -60,6 +53,7 @@ class TestRailApiWrapper
             "include_all" => true);
         $response = TestRailApiWrapper::$testrail_context->send_post("add_run/" . TestRailApiWrapper::$testrail_project_id, $data);
         TestRailApiWrapper::$testrail_testrun_id = $response["id"];
+        return $response["id"];
     }
 
     /**
@@ -128,7 +122,6 @@ class TestRailApiWrapper
     public static function create_new_section($testsection_name)
     {
         # Build dict
-        print("----------------------\n");
         $data = array(
             "name" => $testsection_name,
             "suite_id" => TestRailApiWrapper::$testrail_testplan_id);
@@ -147,6 +140,13 @@ class TestRailApiWrapper
 
         return $response;
     }
+
+    public static function set_runid($run_id)
+    {
+        TestRailApiWrapper::$testrail_testrun_id=$run_id;
+    }
+
+
 
     private static $testrail_context;
 

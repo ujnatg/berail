@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
-use Behat\TestRailExtension\TestRailAPIException;
+use ApplauseAuto\TestRailExtension\TestRailAPIException;
 
 class TestRailExtension implements Extension
 {
@@ -103,7 +103,9 @@ class TestRailExtension implements Extension
                 $config['testrun_basename'],
                 $config['testrun_description'],
                 $config['project_id'],
-                $config['testsuite_id']
+                $config['testsuite_id'],
+                $config['create_new_suite'],
+                $container
             ));
             $definition->addTag(EventDispatcherExtension::SUBSCRIBER_TAG, array('priority' => 0));
             $container->setDefinition('behat.listener.sessions', $definition);
