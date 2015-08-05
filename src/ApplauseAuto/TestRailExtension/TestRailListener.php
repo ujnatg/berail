@@ -84,7 +84,7 @@ class TestRailListener implements EventSubscriberInterface
         $details="";
         foreach(FoxFeatureContext::$stepResultDetails as $key => $value)
         {
-            $details = $details . "Step #" . $key . "failed: " . $value['message'] . "\n" . $value['url'] . "\n-------------------\n";
+            $details = $details . "Step #" . $key . "failed: " . $value['message'] . "\n" . "[Snapshot](" . $value['url'] . ")\n-------------------\n";
         }
         return $details;
     }
@@ -96,7 +96,7 @@ class TestRailListener implements EventSubscriberInterface
         {
             $key = $output_array[1];
             print("Scenario result for case id #" . $key . " ->" . $this->get_result_by_array() . "\n");
-            TestRailApiWrapper::log_testcase_result($key, $this->get_result_by_array(), 'Step\n' . $this->buildComment());
+            TestRailApiWrapper::log_testcase_result($key, $this->get_result_by_array(), $this->buildComment());
 
             // Clean results
             $this->results_array=[];
@@ -109,7 +109,7 @@ class TestRailListener implements EventSubscriberInterface
         // get scenario id
         foreach($this->testcases as $key => $value){
             if ($value==$event->getScenario()->getTitle()){
-                TestRailApiWrapper::log_testcase_result($key, $this->resolvResult($event->getTestResult()), 'Scenario\n' . $this->buildComment());
+                TestRailApiWrapper::log_testcase_result($key, $this->resolvResult($event->getTestResult()), $this->buildComment());
             }
         }
         $testResult = $event->getTestResult();
