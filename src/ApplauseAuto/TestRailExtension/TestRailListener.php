@@ -36,6 +36,8 @@ use Behat\Gherkin\Lexer;
 use Behat\Gherkin\Keywords\ArrayKeywords;
 use ApplauseAuto\TestRailExtension\TestRailApiWrapper;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use GLOBStorage;
+use FoxFeatureContext;
 
 class TestRailListener implements EventSubscriberInterface
 {
@@ -76,6 +78,17 @@ class TestRailListener implements EventSubscriberInterface
 
     private $results_array;
 
+    public function buildComment()
+    {
+        // Build comment
+        $details="";
+        foreach(FoxFeatureContext::$stepResultDetails as $key => $value)
+        {
+            $details = $details . "Step #" . $key . "failed: " . $value['message'] . "\n" . $value['url'] . "\n-------------------\n";
+        }
+        return $details;
+    }
+
     public function getStepResult(AfterStepTested $event)
     {
         array_push($this->results_array, $event->getTestResult()->getResultCode());
@@ -83,10 +96,11 @@ class TestRailListener implements EventSubscriberInterface
         {
             $key = $output_array[1];
             print("Scenario result for case id #" . $key . " ->" . $this->get_result_by_array() . "\n");
-            TestRailApiWrapper::log_testcase_result($key, $this->get_result_by_array(), "description");
+            TestRailApiWrapper::log_testcase_result($key, $this->get_result_by_array(), 'Step\n' . $this->buildComment());
 
             // Clean results
             $this->results_array=[];
+            FoxFeatureContext::$stepResultDetails=[];
         }
     }
 
@@ -95,7 +109,7 @@ class TestRailListener implements EventSubscriberInterface
         // get scenario id
         foreach($this->testcases as $key => $value){
             if ($value==$event->getScenario()->getTitle()){
-                TestRailApiWrapper::log_testcase_result($key, $this->resolvResult($event->getTestResult()), "description");
+                TestRailApiWrapper::log_testcase_result($key, $this->resolvResult($event->getTestResult()), 'Scenario\n' . $this->buildComment());
             }
         }
         $testResult = $event->getTestResult();
