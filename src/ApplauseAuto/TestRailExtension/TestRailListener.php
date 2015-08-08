@@ -97,7 +97,7 @@ class TestRailListener implements EventSubscriberInterface
         array_push($this->results_array, $event->getTestResult()->getResultCode());
         // save message on fail
         if ($event->getTestResult()->getResultCode()==99){
-            FoxFeatureContext::$stepResultDetails[$event->getStep()->getLine()]['error message']=$event->getException();
+            FoxFeatureContext::$stepResultDetails[$event->getStep()->getLine()]['error message'] = $event->getTestResult()->getException()->getMessage();
         }
 
         if (preg_match("/I report case result \"([0-9]+)\"$/", $event->getStep()->getText(), $output_array))
