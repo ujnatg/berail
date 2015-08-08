@@ -88,7 +88,6 @@ class TestRailListener implements EventSubscriberInterface
                 $details = $details . "Step #" . $key . "failed: " . $value['message'] . "\n" . $value['error message'] . "\n" . "[Snapshot](" . $value['url'] . ")\n-------------------\n";}
             else{
                 $details = $details . "Step #" . $key . "failed: " . $value['message'] . "\n" . $value['error message'] . "\n" . "[Snapshot](" . ")\n-------------------\n";}
-        else}
         }
         return $details;
     }
