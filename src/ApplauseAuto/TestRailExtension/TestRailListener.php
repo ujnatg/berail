@@ -84,7 +84,7 @@ class TestRailListener implements EventSubscriberInterface
         $details="";
         foreach(FoxFeatureContext::$stepResultDetails as $key => $value)
         {
-            $details = $details . "Step #" . $key . "failed: " . $value['message'] . "\n" . "[Snapshot](" . $value['url'] . ")\n-------------------\n";
+            $details = $details . "Step #" . $key . "failed: " . $value['message'] . "\n" . $value['error message'] . "\n" . "[Snapshot](" . $value['url'] . ")\n-------------------\n";
         }
         return $details;
     }
@@ -92,6 +92,11 @@ class TestRailListener implements EventSubscriberInterface
     public function getStepResult(AfterStepTested $event)
     {
         array_push($this->results_array, $event->getTestResult()->getResultCode());
+        // save message on fail
+        if ($event->getTestResult()->getResultCode()==99){
+            FoxFeatureContext::$stepResultDetails[$event->getStep()->getLine()]['error message']=$event->getException();
+        }
+
         if (preg_match("/I report case result \"([0-9]+)\"$/", $event->getStep()->getText(), $output_array))
         {
             $key = $output_array[1];
