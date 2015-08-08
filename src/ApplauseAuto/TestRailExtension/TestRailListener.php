@@ -85,9 +85,9 @@ class TestRailListener implements EventSubscriberInterface
         foreach(FoxFeatureContext::$stepResultDetails as $key => $value)
         {
             if ($value['url']!=''){
-                $details = $details . "Step #" . $key . "failed: " . $value['message'] . "\n" . $value['error message'] . "\n" . "[Snapshot](" . $value['url'] . ")\n-------------------\n";}
+                $details = $details . "Step #" . $key . $value['message'] . "\n" . $value['error message'] . "\n" . "[Snapshot](" . $value['url'] . ")\n";}
             else{
-                $details = $details . "Step #" . $key . "failed: " . $value['message'] . "\n" . $value['error message'] . "\n" . "[Snapshot](" . ")\n-------------------\n";}
+                $details = $details . "Step #" . $key . "failed: " . $value['message'] . "\n" . $value['error message'] . "\n";}
         }
         return $details;
     }
