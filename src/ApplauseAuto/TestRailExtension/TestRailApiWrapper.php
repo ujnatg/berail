@@ -31,7 +31,7 @@ class TestRailApiWrapper
 //        TestRailApiWrapper::$testrail_log_results = $testrail_log_results;
         TestRailApiWrapper::$testrail_testplan_id = $testrail_testplain_id;
         TestRailApiWrapper::$testrail_project_id = $testrail_project_id;
-        TestRailApiWrapper::$testrail_testrun_name = date("d-m-Y H:i:s") . " Fox PHP " .  " " . $testrail_testrun_name;
+        TestRailApiWrapper::$testrail_testrun_name = date("d-m-Y H:i:s") . " LOCAL " . " Fox PHP " .  " " . $testrail_testrun_name;
         TestRailApiWrapper::$testrail_testrun_description = $testrail_testrun_description;
 
         TestRailApiWrapper::$testrail_context = new TestRailAPIClient(TestRailApiWrapper::$testrail_url);
