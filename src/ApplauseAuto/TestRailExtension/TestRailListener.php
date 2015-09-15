@@ -81,6 +81,7 @@ class TestRailListener implements EventSubscriberInterface
     public function buildComment()
     {
         // Build comment
+        try{
         $details="";
         foreach(FoxFeatureContext::$stepResultDetails as $key => $value)
         {
@@ -89,7 +90,13 @@ class TestRailListener implements EventSubscriberInterface
             else{
                 $details = $details . "Step #" . $key . " " . $value['message'] . "\n" . $value['error message'] . "\n";}
         }
-        return $details;
+        return $details;}
+        catch(\Exception $ex){
+            $STDERR = fopen('php://stderr', 'w+');
+            fwrite($STDERR, "Cannot build a comment for failed step based on:" . "\n");
+            fwrite($STDERR, FoxFeatureContext::$stepResultDetails . "\n");
+            throw $ex;
+        }
     }
 
     public function getStepResult(AfterStepTested $event)
