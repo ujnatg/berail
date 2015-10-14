@@ -150,17 +150,27 @@ class TestRailAPIClient
         }
 
         $info = curl_getinfo($ch);
-        if ($info['http_code'] != 200)
-        {
-            throw new TestRailAPIException(
-                sprintf(
-                    'TestRail API returned HTTP %s (%s)',
-                    $info['http_code'],
-                    isset($result['error']) ?
-                        '"' . $result['error'] . '"' :
-                        'No additional error message received'
-                )
-            );
+        try {
+            if ($info['http_code'] != 200)
+            {
+                throw new TestRailAPIException(
+                    sprintf(
+                        'TestRail API returned HTTP %s (%s)',
+                        $info['http_code'],
+                        isset($result['error']) ?
+                            '"' . $result['error'] . '"' :
+                            'No additional error message received'
+                    )
+                );
+            }
+        }catch (\Exception $ex){
+             print (sprintf(
+                        'TestRail API returned HTTP %s (%s)',
+                        $info['http_code'],
+                        isset($result['error']) ?
+                            '"' . $result['error'] . '"' :
+                            'No additional error message received'
+                    ));
         }
 
         $this->_close_handle($ch);
