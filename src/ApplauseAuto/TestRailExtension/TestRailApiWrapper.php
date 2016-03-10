@@ -15,7 +15,7 @@ class TestRailApiWrapper
      * @param $testrail_testrun_name
      * @param $testrail_testrun_description
      * @param $testrail_project_id
-     * @param $testrail_testplain_id
+     * @param $testrail_testplan_id
      */
     public static function set_testrun_context($testrail_username,
                                                $testrail_password,
@@ -24,13 +24,13 @@ class TestRailApiWrapper
                                                $testrail_testrun_description,
                                                $where_was_test_run,
                                                $testrail_project_id,
-                                               $testrail_testplain_id)
+                                               $testrail_testplan_id)
     {
         TestRailApiWrapper::$testrail_username = $testrail_username;
         TestRailApiWrapper::$testrail_password = $testrail_password;
         TestRailApiWrapper::$testrail_url = $testrail_url;
 //        TestRailApiWrapper::$testrail_log_results = $testrail_log_results;
-        TestRailApiWrapper::$testrail_testplan_id = $testrail_testplain_id;
+        TestRailApiWrapper::$testrail_testplan_id = $testrail_testplan_id;
         TestRailApiWrapper::$testrail_project_id = $testrail_project_id;
         TestRailApiWrapper::$testrail_testrun_name = date("d-m-Y H:i:s") . $where_was_test_run . " Fox PHP " .  " " . $testrail_testrun_name; // test rail run name to include type of Local run
         TestRailApiWrapper::$testrail_testrun_description = $testrail_testrun_description;
