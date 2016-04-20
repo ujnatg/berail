@@ -67,6 +67,7 @@ class TestRailExtension implements Extension
                 ->scalarNode('testrail_url')->end()
                 ->scalarNode('testrun_basename')->end()
                 ->scalarNode('testrun_description')->end()
+                ->scalarNode('testrun_location')->end()
                 ->scalarNode('project_id')->end()
                 ->scalarNode('testsuite_id')->end()
                 ->booleanNode('create_new_suite')->end()
@@ -102,6 +103,7 @@ class TestRailExtension implements Extension
                 $config['testrail_url'],
                 $config['testrun_basename'],
                 $config['testrun_description'],
+                $config['testrun_location'],
                 $config['project_id'],
                 $config['testsuite_id'],
                 $config['create_new_suite'],
