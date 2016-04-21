@@ -50,6 +50,7 @@ class TestRailListener implements EventSubscriberInterface
         $this->testrail_url=$testrail_url;
         $this->testrun_basename=$testrun_basename;
         $this->testrun_description=$testrun_description;
+        $this->testrun_location=$testrun_location;
         $this->project_id=$project_id;
         $this->testsuite_id=$testsuite_id;
         $this->results_array=[];
@@ -217,6 +218,7 @@ class TestRailListener implements EventSubscriberInterface
             $this->testrail_url,
             " " . $param . " " . $this->testrun_basename,
             $this->testrun_description,
+            $this->testrun_location,
             $this->project_id,
             $this->testsuite_id
         );
