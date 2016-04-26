@@ -14,7 +14,6 @@ class TestRailApiWrapper
      * @param $testrail_url
      * @param $testrail_testrun_name
      * @param $testrail_testrun_description
-     * @param $testrail_testrun_location
      * @param $testrail_project_id
      * @param $testrail_testplan_id
      */
@@ -23,7 +22,6 @@ class TestRailApiWrapper
                                                $testrail_url,
                                                $testrail_testrun_name,
                                                $testrail_testrun_description,
-                                               $testrail_testrun_location,
                                                $where_was_test_run,
                                                $testrail_project_id,
                                                $testrail_testplan_id)
@@ -35,7 +33,7 @@ class TestRailApiWrapper
         TestRailApiWrapper::$testrail_testplan_id = $testrail_testplan_id;
         TestRailApiWrapper::$testrail_project_id = $testrail_project_id;
         date_default_timezone_set('America/Chicago');
-        TestRailApiWrapper::$testrail_testrun_name = date("d-m-Y H:i:s") . $testrail_testrun_location . " Fox PHP " .  " " . $testrail_testrun_name; // test rail run name to include type of Local run
+        TestRailApiWrapper::$testrail_testrun_name = date("d-m-Y H:i:s") . $where_was_test_run . " Fox PHP " .  " " . $testrail_testrun_name; // test rail run name to include type of Local run
         TestRailApiWrapper::$testrail_testrun_description = $testrail_testrun_description;
 
         TestRailApiWrapper::$testrail_context = new TestRailAPIClient(TestRailApiWrapper::$testrail_url);
